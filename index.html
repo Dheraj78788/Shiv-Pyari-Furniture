@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Shiv-Pyari Furniture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* Animate cards on hover */
+    .card-hover:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 15px 25px rgba(62, 47, 34, 0.3);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+
+    /* Chatbot styles */
+    #chatbot {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 360px;
+      max-width: 95vw;
+      background: #f9f0e6;
+      border-radius: 1rem;
+      box-shadow: 0 8px 30px rgba(62, 47, 34, 0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-size: 14px;
+      z-index: 1000;
+      font-family: "Poppins", sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    #chatbot.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    #chatbot-header {
+      background: #3e2f22;
+      color: #f3ead5;
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: default;
+      user-select: none;
+      font-size: 1.125rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #chatbot-messages {
+      flex-grow: 1;
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+      max-height: 420px;
+      background: #fff8f0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(62, 47, 34, 0.3) transparent;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #3e2f22;
+    }
+
+    #chatbot-messages::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chatbot-messages::-webkit-scrollbar-thumb {
+      background-color: rgba(62, 47, 34, 0.3);
+      border-radius: 4px;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-weight: 500;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message.user .message-text {
+      background: #3e2f22;
+      color: #f3ead5;
+      border-radius: 1rem 1rem 0 1rem;
+      padding: 0.6rem 1.2rem;
+      box-shadow: 0 4px 8px rgba(62, 47, 34, 0.3);
+      font-weight: 600;
+      font-size: 0.95rem;
+      max-width: 75%;
+    }
+
+    .message.bot .message-text {
+      background: #f3ead5;
+      color: #3e2f22;
+      border-radius: 1rem 1rem 1rem 0;
+      padding: 0.6rem 1.2rem;
+      box-shadow: 0 4px 12px rgba(62, 47, 34, 0.15);
+      font-size: 0.95rem;
+      max-width: 75%;
+      white-space: pre-line;
+    }
+
+    #chatbot-input-container {
+      display: flex;
+      border-top: 1px solid #d9cfc0;
+      background: #f9f0e6;
+      padding: 0.75rem 1rem;
+    }
+
+    #chatbot-input {
+      flex-grow: 1;
+      border: none;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-family: "Poppins", sans-serif;
+      background: transparent;
+      color: #3e2f22;
+      outline: none;
+      border-radius: 9999px;
+      box-shadow: inset 0 0 5px rgba(62, 47, 34, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    #chatbot-input:focus {
+      box-shadow: inset 0 0 8px rgba(62, 47, 34, 0.3);
+    }
+
+    #chatbot-send {
+      background: #3e2f22;
+      color: #f3ead5;
+      border: none;
+      padding: 0 1.25rem;
+      margin-left: 0.75rem;
+      cursor: pointer;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      box-shadow: 0 4px 10px rgba(62, 47, 34, 0.3);
+      transition: background 0.3s ease;
+    }
+
+    #chatbot-send:hover {
+      background: #5a4637;
+    }
+
+    /* Chatbot toggle button */
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background-color: #3e2f22;
+      color: #f3ead5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(62, 47, 34, 0.3);
+      z-index: 1100;
+      transition: background-color 0.3s ease;
+    }
+
+    #chatbot-toggle:hover {
+      background-color: #5a4637;
+    }
+
+    .chatbot-icon {
+      animation: glow 2s infinite;
+    }
+
+    @keyframes glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 5px #FFA500, 0 0 10px #FFA500, 0 0 15px #FFA500;
+      }
+
+      50% {
+        box-shadow: 0 0 20px #FF8C00, 0 0 30px #FF8C00;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-[#f3ead5] text-[#3e2f22] min-h-screen flex flex-col">
+  <header
+    class="max-w-7xl mx-auto w-full px-6 sm:px-12 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="text-[18px] font-semibold tracking-widest text-center sm:text-left w-full sm:w-auto">
+      SHIV-PYARI FURNITURE
+    </div>
+    <nav
+      class="flex flex-col sm:flex-row items-center gap-4 text-[14px] font-semibold tracking-wide max-w-full overflow-x-auto no-scrollbar w-full sm:w-auto">
+      <div class="flex justify-center sm:justify-start gap-6 w-full sm:w-auto flex-wrap">
+        <a class="bg-[#3e2f22] text-[#f3ead5] rounded-full px-5 py-2 whitespace-nowrap transition" href="#"
+          aria-current="page">HOME</a>
+        <a class="hover:underline whitespace-nowrap px-3 py-2 rounded-md transition hover:bg-[#e6d9c7]"
+          href="about.html">ABOUT</a>
+        <a class="hover:underline whitespace-nowrap px-3 py-2 rounded-md transition hover:bg-[#e6d9c7]"
+          href="product.html">PRODUCT</a>
+        <a class="hover:underline whitespace-nowrap px-3 py-2 rounded-md transition hover:bg-[#e6d9c7]"
+          href="contact.html">CONTACT</a>
+      </div>
+      <form class="relative flex-shrink-0 w-full sm:w-auto mt-3 sm:mt-0" role="search" aria-label="Search products"
+        action="product.html" method="GET">
+        <input name="search"
+          class="pl-4 pr-10 py-2 rounded-full text-[14px] font-semibold tracking-widest text-[#3e2f22] placeholder-[#bfb1a0] bg-[#f3ead5] border border-[#d9cfc0] focus:outline-none focus:ring-2 focus:ring-[#3e2f22] transition w-full sm:w-48 md:w-64 lg:w-80"
+          placeholder="SEARCH PRODUCTS" type="search" aria-label="Search products" />
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-[#3e2f22] text-lg hover:text-[#5a4637] transition"
+          type="submit" aria-label="Submit search">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto mt-10 px-6 sm:px-12 flex-grow space-y-12 mb-20">
+    <section
+      class="flex flex-col sm:flex-row bg-[#f9f0e6] rounded-3xl overflow-hidden shadow-lg border border-[#e6d9c7]">
+      <div class="sm:w-1/2">
+        <img
+          alt="Modern chair with wooden arms and legs next to a low rectangular stone table with decorative vases in a minimalistic room with wooden door and white walls"
+          class="w-full h-full object-cover rounded-t-3xl sm:rounded-l-3xl sm:rounded-tr-none" height="400"
+          src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80"
+          width="600" />
+      </div>
+      <div class="sm:w-1/2 p-12 flex flex-col justify-center space-y-10">
+        <h1
+          class="text-5xl font-extrabold leading-tight tracking-tight text-[#3e2f22] drop-shadow-[0_2px_2px_rgba(62,47,34,0.25)]">
+          Shiv-Pyari Furniture,
+          <br />
+          <span class="text-[#5a4637]">Premium Work's</span>
+        </h1>
+        <p class="text-xl max-w-md text-[#5a4637] font-medium tracking-wide">
+          Whether you love modern minimalism, timeless classics, or bold statement pieces, we craft furniture that
+          elevates your space.
+        </p>
+        <div class="flex flex-wrap gap-5">
+          <button
+            class="text-xs font-semibold border border-[#3e2f22] rounded-full px-6 py-3 hover:bg-[#3e2f22] hover:text-[#f3ead5] transition shadow-sm shadow-[#3e2f22]/20">HIGH
+            QUALITY</button>
+          <button
+            class="text-xs font-semibold border border-[#3e2f22] rounded-full px-6 py-3 hover:bg-[#3e2f22] hover:text-[#f3ead5] transition shadow-sm shadow-[#3e2f22]/20">PREMIUM
+            DESIGN</button>
+          <button
+            class="text-xs font-semibold border border-[#3e2f22] rounded-full px-6 py-3 hover:bg-[#3e2f22] hover:text-[#f3ead5] transition shadow-sm shadow-[#3e2f22]/20">VERSATILE</button>
+          <a href="learn_more.html" aria-label="Learn more about Shiv-Pyari Furniture">
+            <button
+              class="text-xs font-semibold bg-[#3e2f22] text-[#f3ead5] rounded-full px-7 py-3 flex items-center gap-3 hover:bg-[#5a4637] transition shadow-md shadow-[#3e2f22]/40">LEARN
+              MORE <i class="fas fa-chevron-right text-[14px]"></i></button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 sm:grid-cols-4 gap-10">
+      <article
+        class="relative rounded-3xl overflow-hidden cursor-pointer group shadow-lg border border-[#3e2f22] card-hover flex flex-col">
+        <img alt="Bed" class="w-full h-56 object-cover rounded-t-3xl" src="assets/baed/baed1.jpg" />
+        <div class="p-6 flex flex-col flex-grow justify-between bg-[#f9f0e6] rounded-b-3xl">
+          <h2 class="text-2xl font-semibold mb-2">Bed</h2>
+          <p class="text-sm text-[#5a4637]">Comfortable and stylish beds crafted with premium wood and upholstery.</p>
+        </div>
+      </article>
+
+      <article
+        class="relative rounded-3xl overflow-hidden cursor-pointer group shadow-lg border border-[#3e2f22] card-hover flex flex-col">
+        <img alt="Wardrobe" class="w-full h-56 object-cover rounded-t-3xl" src="assets/kabard/kabard6.jpg" />
+        <div class="p-6 flex flex-col flex-grow justify-between bg-[#f9f0e6] rounded-b-3xl">
+          <h2 class="text-2xl font-semibold mb-2">Wardrobe</h2>
+          <p class="text-sm text-[#5a4637]">Elegant wardrobes with ample storage and sleek design to organize your
+            space.</p>
+        </div>
+      </article>
+
+      <article
+        class="relative rounded-3xl overflow-hidden cursor-pointer group shadow-lg border border-[#3e2f22] card-hover flex flex-col">
+        <img alt="TV Showcase" class="w-full h-56 object-cover rounded-t-3xl" src="assets/tv/tv1.jpeg" />
+        <div class="p-6 flex flex-col flex-grow justify-between bg-[#f9f0e6] rounded-b-3xl">
+          <h2 class="text-2xl font-semibold mb-2">TV Showcase</h2>
+          <p class="text-sm text-[#5a4637]">Modern TV showcases designed to complement your living room aesthetics.</p>
+        </div>
+      </article>
+
+      <article
+        class="relative rounded-3xl overflow-hidden cursor-pointer group shadow-lg border border-[#3e2f22] card-hover flex flex-col">
+        <img alt="Kitchen Cabinet" class="w-full h-56 object-cover rounded-t-3xl" src="assets/cabinate/cabinate1.jpg" />
+        <div class="p-6 flex flex-col flex-grow justify-between bg-[#f9f0e6] rounded-b-3xl">
+          <h2 class="text-2xl font-semibold mb-2">Kitchen Cabinet</h2>
+          <p class="text-sm text-[#5a4637]">Functional and stylish kitchen cabinets crafted for modern homes.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <section
+    class="bg-[#f9f0e6] rounded-3xl p-10 shadow-lg border border-[#e6d9c7] max-w-5xl mx-auto text-center space-y-8">
+    <h2 class="text-3xl font-extrabold text-[#3e2f22]">Why Choose Shiv-Pyari Furniture?</h2>
+    <p class="text-lg text-[#5a4637] max-w-3xl mx-auto">
+      We combine craftsmanship, premium materials, and sustainable practices to create furniture that lasts a lifetime.
+      Our designs are timeless, versatile, and tailored to elevate your living spaces.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div class="space-y-3">
+        <i class="fas fa-leaf text-4xl text-[#5a4637]"></i>
+        <h3 class="font-semibold text-xl">Sustainability</h3>
+        <p class="text-sm text-[#3e2f22]">Eco-friendly materials and responsible production methods.</p>
+      </div>
+      <div class="space-y-3">
+        <i class="fas fa-tools text-4xl text-[#5a4637]"></i>
+        <h3 class="font-semibold text-xl">Craftsmanship</h3>
+        <p class="text-sm text-[#3e2f22]">Skilled artisans ensuring every detail is perfect.</p>
+      </div>
+      <div class="space-y-3">
+        <i class="fas fa-palette text-4xl text-[#5a4637]"></i>
+        <h3 class="font-semibold text-xl">Design</h3>
+        <p class="text-sm text-[#3e2f22]">Timeless and versatile designs that fit your lifestyle.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="h-20"></div>
+
+  <footer class="bg-[#3e2f22] text-[#f3ead5]">
+    <div class="max-w-7xl mx-auto px-8 py-14 grid grid-cols-1 sm:grid-cols-3 gap-12">
+      <div>
+        <h3 class="font-bold text-lg mb-5 tracking-widest uppercase">Shiv-Pyari Furniture</h3>
+        <p class="text-sm max-w-xs leading-relaxed">
+          Crafting timeless furniture with premium materials and sustainable practices. Elevate your space with elegance
+          and quality.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-5 tracking-widest uppercase">Quick Links</h3>
+        <ul class="space-y-3 text-sm">
+          <li><a href="#" class="hover:underline">Home</a></li>
+          <li><a href="about.html" class="hover:underline">About</a></li>
+          <li><a href="product.html" class="hover:underline">Product</a></li>
+          <li><a href="contact.html" class="hover:underline">Contact</a></li>
+          <li><a href="learn_more.html" class="hover:underline">Learn More</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-5 tracking-widest uppercase">Contact Us</h3>
+        <p class="text-sm mb-3 flex items-center gap-2">
+          <i class="fas fa-envelope"></i>
+          <a href="mailto:quantumsaga78@gmail.com" class="hover:underline">quantumsaga78@gmail.com</a>
+        </p>
+        <p class="text-sm mb-3 flex items-center gap-2">
+          <i class="fas fa-phone-alt"></i>
+          <a href="tel:9604703364" class="hover:underline">9604703364</a>,
+          <a href="tel:7878830843" class="hover:underline">7878830843</a>
+        </p>
+        <p class="text-sm flex items-center gap-2">
+          <i class="fab fa-whatsapp"></i>
+          <a href="https://wa.me/917878830843" target="_blank" rel="noopener" class="hover:underline">WhatsApp</a>
+        </p>
+      </div>
+    </div>
+    <div class="border-t border-[#5a4637] text-center text-xs py-5 select-none">
+      &copy; 2024 Shiv-Pyari Furniture. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Floating Chatbot Icon -->
+  <div id="chatbotToggle" class="fixed bottom-6 right-6 bg-orange-500 p-4 rounded-full cursor-pointer shadow-lg"
+    style="z-index: 99999;">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+      stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M17 8h2a2 2 0 012 2v9a2 2 0 01-2 2h-2M7 8H5a2 2 0 00-2 2v9a2 2 0 002 2h2m10-9V5a2 2 0 00-2-2H9a2 2 0 00-2 2v5m2 4h4" />
+    </svg>
+  </div>
+
+  <!-- Chat Window -->
+  <div id="chatbotWindow"
+    class="hidden fixed bottom-24 right-6 w-80 bg-white border border-gray-300 rounded-xl shadow-xl flex flex-col overflow-hidden"
+    style="z-index: 99998;">
+
+    <!-- Header -->
+    <div class="bg-orange-500 text-white px-4 py-3 font-semibold">Shiv-Pyari Assistant</div>
+
+    <!-- Product Dropdown -->
+    <div class="p-3 border-b">
+      <label for="productSelect" class="text-sm font-semibold">🔍 Select Product</label>
+      <select id="productSelect" class="w-full border rounded p-2 mt-1 text-sm">
+        <option value="">-- Choose --</option>
+        <option value="bed">Bed</option>
+        <option value="wardrobe">Wardrobe</option>
+        <option value="tv_unit">TV Unit</option>
+        <option value="sofa">Sofa</option>
+        <option value="table">Table</option>
+        <option value="mandir">Mandir</option>
+        <option value="cabinet">Cabinet</option>
+      </select>
+    </div>
+
+    <!-- Chat Content -->
+    <div id="chatContent" class="flex-1 p-3 space-y-2 overflow-y-auto text-sm max-h-96 bg-gray-50">
+      <div class="bg-gray-200 p-2 rounded shadow-sm">
+        👋 <b>Welcome to Shiv-Pyari Furniture!</b><br>Ask me anything about our products, quality, or price range.
+      </div>
+    </div>
+
+    <!-- Input Field -->
+    <div class="flex border-t p-2 bg-white">
+      <input id="userInput" type="text" placeholder="Ask about bed, wardrobe..."
+        class="flex-1 border rounded px-2 py-1 text-sm" />
+      <button onclick="handleUserInput()" class="ml-2 bg-orange-500 text-white px-4 py-1 rounded text-sm">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const furnitureData = {
+      bed: {
+        range: "₹15,000 – ₹55,000",
+        types: {
+          basic: {
+            price: "₹15,000 – ₹25,000",
+            materials: "MDF or Commercial Ply with normal laminate",
+            quality: "Budget-friendly, decent durability"
+          },
+          premium: {
+            price: "₹26,000 – ₹40,000",
+            materials: "BWP Ply, branded laminate, soft-close fittings",
+            quality: "Good durability and finish"
+          },
+          luxury: {
+            price: "₹41,000 – ₹55,000",
+            materials: "Solid wood, BWR Ply, Veneer, Hettich/Häfele hardware",
+            quality: "High-end, elegant, long-lasting"
+          }
+        }
+      },
+      wardrobe: {
+        range: "₹12,000 – ₹45,000",
+        types: {
+          basic: {
+            price: "₹12,000 – ₹18,000",
+            materials: "Commercial Ply with matte laminate",
+            quality: "Standard"
+          },
+          premium: {
+            price: "₹20,000 – ₹35,000",
+            materials: "BWP Ply with gloss laminate and soft close",
+            quality: "Smooth and spacious"
+          },
+          luxury: {
+            price: "₹36,000 – ₹45,000+",
+            materials: "BWR Ply or Hardwood, acrylic finish, premium fittings",
+            quality: "Luxury and premium design"
+          }
+        }
+      },
+      tv_unit: {
+        range: "₹10,000 – ₹30,000",
+        types: {
+          floating: "₹10,000 – ₹18,000",
+          floor: "₹18,000 – ₹30,000"
+        },
+        materials: "MDF or Commercial Ply, textured laminates or PU paint"
+      },
+      sofa: {
+        range: "₹18,000 – ₹65,000",
+        seating: ["2-seater", "3-seater", "L-shape"],
+        materials: "Sal wood frame, high-density foam, premium fabric or leatherette"
+      },
+      table: {
+        range: "₹4,000 – ₹25,000",
+        types: ["Center Table", "Dining Table", "Side Table"],
+        materials: "Rubberwood, Sheesham, BWR Ply with veneer top"
+      },
+      mandir: {
+        range: "₹5,000 – ₹20,000",
+        styles: ["Wall-mounted", "Stand-alone", "Temple style"],
+        materials: "Plywood + laminate, Teak wood, CNC Jaali work"
+      },
+      cabinet: {
+        range: "₹6,000 – ₹22,000",
+        usage: ["Kitchen", "Office", "Utility"],
+        materials: "MDF, BWR Ply with PVC or laminate finish"
+      }
+    };
+
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotWindow = document.getElementById('chatbotWindow');
+    const chatContent = document.getElementById('chatContent');
+    const userInput = document.getElementById('userInput');
+    const productSelect = document.getElementById('productSelect');
+
+    chatbotToggle.addEventListener('click', () => {
+      chatbotWindow.classList.toggle('hidden');
+    });
+
+    productSelect.addEventListener('change', () => {
+      const value = productSelect.value;
+      if (value) {
+        showMessage(`Tell me about ${value}`, 'user');
+        const response = getProductInfo(value);
+        setTimeout(() => showMessage(response, 'bot'), 400);
+      }
+    });
+
+    function handleUserInput() {
+      const query = userInput.value.trim();
+      if (!query) return;
+      showMessage(query, 'user');
+      const matched = findClosestMatch(query);
+      const response = matched ? getProductInfo(matched) : "Sorry, I couldn't understand that. Please ask about a valid product.";
+      setTimeout(() => showMessage(response, 'bot'), 400);
+      userInput.value = '';
+    }
+
+    function showMessage(message, sender = 'bot') {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = sender === 'user' ? 'text-right text-blue-700' : 'text-left text-gray-800';
+      msgDiv.innerHTML = `<div class="inline-block bg-${sender === 'user' ? 'orange-100' : 'gray-200'} p-2 rounded-lg mb-1 max-w-xs">${message.replace(/\n/g, '<br>')}</div>`;
+      chatContent.appendChild(msgDiv);
+      chatContent.scrollTop = chatContent.scrollHeight;
+    }
+
+    function getProductInfo(product) {
+      const data = furnitureData[product];
+      let msg = `<b>${product.toUpperCase()}</b><br><b>Price Range:</b> ${data.range}<br>`;
+      if (data.types) {
+        for (const [type, info] of Object.entries(data.types)) {
+          msg += `<br>🔹 <b>${capitalize(type)}</b><br>
+        <b>Price:</b> ${info.price}<br>
+        <b>Materials:</b> ${info.materials}<br>
+        <b>Quality:</b> ${info.quality}<br>`;
+        }
+      } else {
+        if (data.materials) msg += `<b>Materials:</b> ${data.materials}<br>`;
+        if (data.seating) msg += `<b>Seating:</b> ${data.seating.join(', ')}<br>`;
+        if (data.styles) msg += `<b>Styles:</b> ${data.styles.join(', ')}<br>`;
+        if (data.usage) msg += `<b>Usage:</b> ${data.usage.join(', ')}<br>`;
+      }
+      return msg;
+    }
+
+    function findClosestMatch(query) {
+      const input = query.toLowerCase();
+      return Object.keys(furnitureData).find(key => input.includes(key) || key.includes(input));
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  </script>

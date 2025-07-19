@@ -1,0 +1,256 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>
+    Shiv-Pyari Furniture - Products
+  </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f3ead5] text-[#3e2f22] min-h-screen p-4 sm:p-8">
+  <header
+    class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 sm:gap-0">
+    <div class="text-[14px] font-semibold tracking-widest">
+      SHIV-PYARI FURNITURE
+    </div>
+    <nav class="flex items-center gap-6 text-[13px] font-semibold tracking-wide">
+      <a class="hover:underline" href="index.html"> HOME
+      </a>
+      <a class="hover:underline" href="about.html">
+        ABOUT
+      </a>
+      <a class="bg-[#3e2f22] text-[#f3ead5] rounded-full px-4 py-1 whitespace-nowrap" href="#">
+        PRODUCT
+      </a>
+      <a class="hover:underline" href="contact.html">
+        CONTACT
+      </a>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto mt-8 space-y-10">
+    <!-- Categories -->
+    <section>
+      <h1 class="text-4xl font-extrabold mb-6 text-center">
+        Our Furniture Categories
+      </h1>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-5xl mx-auto" id="categories">
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="bed">
+          <img alt="Bed category icon showing a modern bed" class="w-24 h-24 object-cover rounded-xl mb-3" height="150"
+            src="assets\baed\baed1.jpg" width="150" />
+          <span class="font-semibold text-lg">
+            Bed
+          </span>
+        </button>
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="tv_stand">
+          <img alt="TV stand category icon showing a wooden TV stand" class="w-24 h-24 object-cover rounded-xl mb-3"
+            height="150" src="assets\tv\tv1.jpeg" width="150" />
+          <span class="font-semibold text-lg">
+            TV Stand
+          </span>
+        </button>
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="sofa">
+          <img alt="Sofa category icon showing a modern sofa" class="w-24 h-24 object-cover rounded-xl mb-3"
+            height="150" src="assets/sofa/sofa1.jpg" width="150" />
+          <span class="font-semibold text-lg">
+            Sofa
+          </span>
+        </button>
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="table">
+          <img alt="Table category icon showing a wooden table" class="w-24 h-24 object-cover rounded-xl mb-3"
+            height="150" src="assets/table/table1.jpg" width="150" />
+          <span class="font-semibold text-lg">
+            Table
+          </span>
+        </button>
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="mandir">
+          <img alt="Mandir category icon showing a wooden mandir" class="w-24 h-24 object-cover rounded-xl mb-3"
+            height="150" src="assets\mandir\mandir1.jpg" width="150" />
+          <span class="font-semibold text-lg">
+            Mandir
+          </span>
+        </button>
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="cabinet">
+          <img alt="Cabinet category icon showing a wooden cabinet" class="w-24 h-24 object-cover rounded-xl mb-3"
+            height="150" src="assets/cabinate/cabinate1.jpg" width="150" />
+          <span class="font-semibold text-lg">
+            Cabinet
+          </span>
+        </button>
+        <button
+          class="category-btn bg-white rounded-3xl shadow-md p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
+          data-category="kabard">
+          <img alt="Kabard category icon showing a wooden kabard" class="w-24 h-24 object-cover rounded-xl mb-3"
+            height="150" src="assets/kabard/kabard1.jpg" width="150" />
+          <span class="font-semibold text-lg">
+            Kabard
+          </span>
+        </button>
+      </div>
+    </section>
+    <!-- Products List -->
+    <section class="hidden max-w-7xl mx-auto space-y-8" id="products-section">
+      <button
+        class="mb-4 px-6 py-2 bg-[#3e2f22] text-[#f3ead5] rounded-full font-semibold hover:bg-[#5a4637] transition"
+        id="back-to-categories">
+        ← Back to Categories
+      </button>
+      <h2 class="text-3xl font-extrabold text-center" id="products-title">
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-6" id="products-list">
+      </div>
+    </section>
+  </main>
+  <script>
+    const categories = {
+      bed: {
+        name: "Bed",
+        products: [
+          { img: "assets/baed/baed1.jpg", alt: "Bed design 1" },
+          { img: "assets/baed/baed2.jpg", alt: "Bed design 2" },
+          { img: "assets/baed/baed3.jpg", alt: "Bed design 3" },
+          { img: "assets/baed/baed4.jpg", alt: "Bed design 4" },
+          { img: "assets/baed/baed5.jpg", alt: "Bed design 5" },
+          { img: "assets/baed/bead6.jpg", alt: "Bed design 6" }
+        ]
+      },
+      tv_stand: {
+        name: "TV Stand",
+        products: [
+          { img: "assets/tv/tv1.jpeg", alt: "TV Stand design 1" },
+          { img: "assets/tv/tv2.jpeg", alt: "TV Stand design 2" },
+          { img: "assets/tv/tv3.jpeg", alt: "TV Stand design 3" },
+          { img: "assets/tv/tv4.jpeg", alt: "TV Stand design 4" },
+          { img: "assets/tv/tv5.jpeg", alt: "TV Stand design 5" }
+        ]
+      },
+      sofa: {
+        name: "Sofa",
+        products: [
+          { img: "assets/sofa/sofa1.jpg", alt: "Sofa design 1" },
+          { img: "assets/sofa/sofa2.jpg", alt: "Sofa design 2" },
+          { img: "assets/sofa/sofa3.jpg", alt: "Sofa design 3" },
+          { img: "assets/sofa/sofa4.jpg", alt: "Sofa design 4" },
+          { img: "assets/sofa/sofa5.jpg", alt: "Sofa design 5" }
+        ]
+      },
+      table: {
+        name: "Table",
+        products: [
+          { img: "assets/table/table1.jpg", alt: "Table design 1" },
+          { img: "assets/table/table2.jpg", alt: "Table design 2" },
+          { img: "assets/table/table3.jpg", alt: "Table design 3" },
+          { img: "assets/table/table4.jpg", alt: "Table design 4" },
+          { img: "assets/table/table5.jpg", alt: "Table design 5" }
+        ]
+      },
+      mandir: {
+        name: "Mandir",
+        products: [
+          { img: "assets/mandir/mandir1.jpg", alt: "Mandir design 1" },
+          { img: "assets/mandir/mandir2.jpg", alt: "Mandir design 2" },
+          { img: "assets/mandir/mandir3.jpg", alt: "Mandir design 3" },
+          { img: "assets/mandir/mandir4.jpg", alt: "Mandir design 4" },
+          { img: "assets/mandir/mandir5.jpg", alt: "Mandir design 5" },
+          { img: "assets/mandir/mandir6.jpg", alt: "Mandir design 5" }
+        ]
+      },
+      cabinet: {
+        name: "Cabinet",
+        products: [
+          { img: "assets/cabinate/cabinate1.jpg", alt: "Cabinet design 1" },
+          { img: "assets/cabinate/cabinate2.jpg", alt: "Cabinet design 2" },
+          { img: "assets/cabinate/cabinate3.jpg", alt: "Cabinet design 3" },
+          { img: "assets/cabinate/cabinate4.jpg", alt: "Cabinet design 4" },
+          { img: "assets/cabinate/cabinate5.jpg", alt: "Cabinet design 5" }
+        ]
+      },
+      kabard: {
+        name: "Kabard",
+        products: [
+          { img: "assets/kabard/kabard1.jpg", alt: "Kabard design 1" },
+          { img: "assets/kabard/kabard2.jpg", alt: "Kabard design 2" },
+          { img: "assets/kabard/kabard3.jpg", alt: "Kabard design 3" },
+          { img: "assets/kabard/kabard4.jpg", alt: "Kabard design 4" },
+          { img: "assets/kabard/kabard5.jpg", alt: "Kabard design 5" }
+        ]
+      }
+    };
+
+    const categoriesContainer = document.getElementById("categories");
+    const productsSection = document.getElementById("products-section");
+    const productsTitle = document.getElementById("products-title");
+    const productsList = document.getElementById("products-list");
+    const backToCategoriesBtn = document.getElementById("back-to-categories");
+
+    function clearProducts() {
+      productsList.innerHTML = "";
+    }
+
+    function showProducts(categoryKey) {
+      const category = categories[categoryKey];
+      if (!category) return;
+      productsTitle.textContent = category.name;
+      clearProducts();
+      category.products.forEach((product) => {
+        const productCard = document.createElement("div");
+        productCard.className = "bg-white rounded-3xl shadow-md overflow-hidden cursor-pointer group";
+        productCard.innerHTML = `
+          <img src="${product.img}" alt="${product.alt}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform rounded-3xl" width="400" height="300"/>
+        `;
+        productsList.appendChild(productCard);
+      });
+      categoriesContainer.classList.add("hidden");
+      productsSection.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showCategories() {
+      productsSection.classList.add("hidden");
+      categoriesContainer.classList.remove("hidden");
+      productsTitle.textContent = "";
+      clearProducts();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    categoriesContainer.querySelectorAll(".category-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const categoryKey = btn.getAttribute("data-category");
+        showProducts(categoryKey);
+      });
+    });
+
+    backToCategoriesBtn.addEventListener("click", () => {
+      showCategories();
+    });
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+
