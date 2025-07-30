@@ -68,6 +68,38 @@
     #modal-close:hover {
       background: #5a4637;
     }
+
+    /* WhatsApp share button */
+    #whatsapp-share {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      transition: all 0.3s ease;
+      z-index: 2100;
+      font-family: "Poppins", sans-serif;
+    }
+
+    #whatsapp-share:hover {
+      background: #1ebe57;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    }
+
+    #whatsapp-share i {
+      font-size: 1.1rem;
+    }
   </style>
 </head>
 
@@ -195,6 +227,11 @@
       <img id="modal-image" class="object-contain" alt="Full Image" />
       <button id="modal-close"
         class="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full px-2">×</button>
+      <button id="whatsapp-share" 
+        class="absolute bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full flex items-center gap-2 transition-all">
+        <i class="fab fa-whatsapp"></i>
+        Send to WhatsApp
+      </button>
     </div>
   </div>
 
@@ -363,12 +400,14 @@
     const modalBackdrop = document.getElementById("modal-backdrop");
     const modalImage = document.getElementById("modal-image");
     const modalClose = document.getElementById("modal-close");
+    const whatsappShare = document.getElementById("whatsapp-share");
 
-
+    let currentImageSrc = "";
 
     function openModal(src, alt) {
       modalImage.src = src;
       modalImage.alt = alt;
+      currentImageSrc = src;
       modalBackdrop.style.display = "flex";
       modalBackdrop.focus();
     }
@@ -377,6 +416,18 @@
       modalBackdrop.style.display = "none";
       modalImage.src = "";
       modalImage.alt = "";
+      currentImageSrc = "";
+    });
+
+    // WhatsApp share functionality
+    whatsappShare.addEventListener("click", () => {
+      if (currentImageSrc) {
+        // Create WhatsApp message with image reference
+        const imageName = currentImageSrc.split('/').pop();
+        const message = `Hi! I'm interested in this furniture design: ${imageName}. Could you please provide more details about this product?`;
+        const whatsappUrl = `https://wa.me/917878830843?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+      }
     });
 
     // Optional: Close modal when clicking outside image
@@ -385,6 +436,7 @@
         modalBackdrop.style.display = "none";
         modalImage.src = "";
         modalImage.alt = "";
+        currentImageSrc = "";
       }
     });
 
